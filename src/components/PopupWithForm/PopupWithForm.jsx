@@ -9,7 +9,7 @@ function PopupWithForm({ name, title, buttonTitle, buttonType, children, isOpen,
         onClick={onClose}>
       </button>
       <h2 className="popup__label">{title}</h2>
-      <form name="form" className={`popup__form popup__form_type_${name}`} novalidate>
+      <form name={`form_type_${name}`} className={`popup__form popup__form_type_${name}`} noValidate>
         {children}
         <button
           type="submit"

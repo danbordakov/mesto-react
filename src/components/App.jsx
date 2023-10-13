@@ -12,7 +12,7 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState('');
+  const [selectedCard, setSelectedCard] = React.useState(false);
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -38,7 +38,7 @@ function App() {
   }
 
   return (
-    <body className="page">
+    <div className="page">
       
     <Header />
     <Main
@@ -59,13 +59,15 @@ function App() {
     title={"Редактировать профиль"}
     buttonTitle={"Сохранить"}
     buttonType={"save"}
+    //Михаилу Барсегяну: попытался по документации Реакта оформить без чилдрена, но никак не получилось запустить проект.
+    //В теории также ничего не смог найти по этому поводу.
     children={
       <>
       <input id="name-input" type="text" className="popup__field popup__field_type_name" name="name" required
-        minlength="2" maxlength="40" placeholder="Введите имя" />
+        minLength="2" maxLength="40" placeholder="Введите имя" />
       <span className="popup__field-error name-input-error">&nbsp;</span>
-      <input id="job-input" type="text" className="popup__field popup__field_type_job" name="job" required minlength="2"
-        maxlength="200" placeholder="Введите деятельность" />
+      <input id="job-input" type="text" className="popup__field popup__field_type_job" name="job" required minLength="2"
+        maxLength="200" placeholder="Введите деятельность" />
       <span className="popup__field-error job-input-error">&nbsp;</span>
       </>
     }
@@ -81,7 +83,7 @@ function App() {
     children={
       <>
         <input id="newitem-name-input" type="text" className="popup__field popup__field_type_newitem-name" name="itemname"
-          placeholder="Название" minlength="2" maxlength="30" required />
+          placeholder="Название" minLength="2" maxLength="30" required />
         <span className="popup__field-error newitem-name-input-error">&nbsp;</span>
         <input id="newitem-link-input" type="url" className="popup__field popup__field_type_newitem-link" name="link"
           placeholder="Ссылка на картинку" required />
@@ -116,7 +118,7 @@ function App() {
     buttonType={"delete-confirm"}
     /> */}
 
-    </body>
+    </div>
   );
 }
 

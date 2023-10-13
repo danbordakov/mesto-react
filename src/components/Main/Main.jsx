@@ -14,12 +14,18 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
       setUserDescription(user.about);
       setUserAvatar(user.avatar);
     })
+    .catch((err) => {
+      console.log(err);
+    })
   }, [])
 
 React.useEffect(() => {
   api.getAllCards()
     .then((items) => {
       setCards(items);
+    })
+    .catch((err) => {
+      console.log(err);
     })
 },[])
 
@@ -53,7 +59,7 @@ React.useEffect(() => {
     <ul className="elements">
       {
       cards.map((item) => (
-        <Card card={item} onCardClick={onCardClick} />
+        <Card card={item} onCardClick={onCardClick} key={item._id}/>
       ))
       }
     </ul>

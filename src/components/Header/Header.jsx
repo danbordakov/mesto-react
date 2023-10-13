@@ -2,7 +2,7 @@ import logoPath from '../../images/logo.svg';
 
 function Header() {
   return (
-    <header class="header">
+    <header className="header">
     <img src={logoPath} alt="Логотип сайта" className="header__logo" />
   </header>
   )
