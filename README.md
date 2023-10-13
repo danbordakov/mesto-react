@@ -18,5 +18,3 @@ upd4: Рефакторинг кода. Компиляция работы в Webp
 upd5: Поключение сервиса к внешнему серверу через API.
 
 upd6: Трансфер проекта на React.
-
-https://danbordakov.github.io/mesto/index.html
