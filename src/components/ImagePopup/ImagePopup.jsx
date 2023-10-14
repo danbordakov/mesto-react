@@ -1,7 +1,7 @@
 function ImagePopup({ card, onClose }) {
 
   return (
-    <div className={`popup popup_type_fullview ${card ? 'popup_opened' : ''}`}>
+    <div className={`popup popup_type_fullview ${card.link ? 'popup_opened' : ''}`}>
     <div className="popup__image-container">
       <button
         type="button"
