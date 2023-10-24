@@ -38,11 +38,10 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick, onCardLike
             cards.map((item) => (
               <li key={item._id} className="element">
                 <Card
-                card={item}
-                onCardClick={onCardClick}
-                onCardLike={onCardLike}
-                onCardDelete={onCardDelete}
-                currentUserId={user._id}
+                  card={item}
+                  onCardClick={onCardClick}
+                  onCardLike={onCardLike}
+                  onCardDelete={onCardDelete}
                 />
               </li>
             ))

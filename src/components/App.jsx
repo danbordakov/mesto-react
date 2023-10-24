@@ -81,8 +81,8 @@ function App() {
       newJob: about
     })
     .then(() => {
-      setCurrentUser({name: name, about: about, avatar: currentUser.avatar, _id: currentUser._id});
-       closeAllPopups();
+      setCurrentUser({...currentUser, name, about});
+      closeAllPopups();
     })
     .catch((err) => {
       console.log(err);
@@ -92,7 +92,7 @@ function App() {
   function handleUpdateAvatar({ avatar }) {
     api.setAvatar({newAvatar: avatar})
     .then(() => {
-      setCurrentUser({name: currentUser.name, about: currentUser.about, avatar: avatar, _id: currentUser._id});
+      setCurrentUser({...currentUser, avatar});
       closeAllPopups();
     })
     .catch((err) => {
@@ -119,8 +119,6 @@ function App() {
       <Header />
       <CurrentUserContext.Provider value={currentUser}>
         <CardsContext.Provider value={cards}>
-          {/* В задании требуется Cards подписать на контекст.
-          Cards находится в Main, потому и CardsContext.Provider */}
           <Main
             onEditProfile={handleEditProfileClick}
             onAddPlace={handleAddPlaceClick}
