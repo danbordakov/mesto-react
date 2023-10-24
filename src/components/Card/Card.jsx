@@ -1,16 +1,31 @@
-function Card({ card, onCardClick }) {
+function Card({ card, onCardClick, onCardLike, onCardDelete, currentUserId }) {
 
   function handleClick() {
     onCardClick(card);
-  } 
+  }
+
+  function handleLikeClick() {
+    onCardLike(card);
+  }
+
+  function handleDeleteClick() {
+    onCardDelete(card);
+  }
+
+  const isLiked = card.likes.some(i => i._id === currentUserId);
+  const cardLikeButtonClassName = ( 
+    `element__button-like ${isLiked && 'element__button-like_active'}` 
+  )
+  const isOwn = card.owner._id === currentUserId;
+
 
   return (
     <li className="element">
       <img className="element__image" alt={card.name} src={card.link} onClick={handleClick} />
       <h2 className="element__description">{card.name}</h2>
-      <button type="button" className="element__button-like" aria-label="Нравится"></button>
+      <button type="button" className={cardLikeButtonClassName} aria-label="Нравится" onClick={handleLikeClick}></button>
       <p className="element__like-counter">{card.likes.length}</p>
-      <button type="button" className="element__button-trash" aria-label="Удалить"></button>
+      {isOwn && <button type="button" className="element__button-trash" aria-label="Удалить" onClick={handleDeleteClick} />}
     </li>
   )
 }
