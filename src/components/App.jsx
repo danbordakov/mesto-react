@@ -3,7 +3,6 @@ import "../index.css";
 import Header from "./Header/Header";
 import Main from "./Main/Main";
 import Footer from "./Footer/Footer";
-import PopupWithForm from "./PopupWithForm/PopupWithForm";
 import ImagePopup from "./ImagePopup/ImagePopup";
 import api from "../utils/API";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
@@ -22,24 +21,15 @@ function App() {
   const [cards, setCards] = React.useState([]);
   
   React.useEffect(() => {
-    api.getUserInfo()
-    .then((user) => {
-      setCurrentUser(user);
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-  }, [])
-
-  React.useEffect(() => {
-    api.getAllCards()
-      .then((items) => {
+    Promise.all([api.getUserInfo(), api.getAllCards()])
+      .then(([user, items]) => {
+        setCurrentUser(user);
         setCards(items);
       })
       .catch((err) => {
         console.log(err);
       })
-  },[])
+  }, [])
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -66,19 +56,22 @@ function App() {
   
   function handleCardLike(card) {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
-      api.changeLikeCardStatus(card._id, isLiked)
-      .then((newCard) => {
-          setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-      })
-      .catch((err) => {
-        console.log(err);
-      })
+    api.changeLikeCardStatus(card._id, isLiked)
+    .then((newCard) => {
+        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+    })
+    .catch((err) => {
+      console.log(err);
+    })
   } 
 
   function handleCardDelete(card) {
     api.deleteCard(card._id)
     .then(() => {
-      setCards(cards.filter(item => item._id != card._id));
+      setCards((state) => state.filter(item => item._id !== card._id));
+    })
+    .catch((err) => {
+      console.log(err);
     })
   }
 
@@ -87,14 +80,24 @@ function App() {
       newName: name,
       newJob: about
     })
-    .then(setCurrentUser({name: name, about: about, avatar: currentUser.avatar, _id: currentUser._id}))
-    .then(closeAllPopups)
+    .then(() => {
+      setCurrentUser({name: name, about: about, avatar: currentUser.avatar, _id: currentUser._id});
+       closeAllPopups();
+    })
+    .catch((err) => {
+      console.log(err);
+    })
   }
 
   function handleUpdateAvatar({ avatar }) {
     api.setAvatar({newAvatar: avatar})
-    .then(setCurrentUser({name: currentUser.name, about: currentUser.about, avatar: avatar, _id: currentUser._id}))
-    .then(closeAllPopups)
+    .then(() => {
+      setCurrentUser({name: currentUser.name, about: currentUser.about, avatar: avatar, _id: currentUser._id});
+      closeAllPopups();
+    })
+    .catch((err) => {
+      console.log(err);
+    })
   }
 
   function handleAddPlaceSubmit({ name, link }) {
@@ -105,48 +108,56 @@ function App() {
     .then((newCard) => {
       setCards([newCard, ...cards])
     })
+    .then(closeAllPopups)
+    .catch((err) => {
+      console.log(err);
+    })
   }
 
-return (
+  return (
     <div className="page">
-      
-    <Header />
-    <CurrentUserContext.Provider value={currentUser}>
-      <CardsContext.Provider value={cards}>
-        <Main
-          onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddPlaceClick}
-          onEditAvatar={handleEditAvatarClick}
-          onCardClick={onCardClick}
-          onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
-          currentUserId={currentUser._id}
-        />
-
-    <Footer />
-
-    <ImagePopup
-      card={selectedCard}
-      onClose={closeAllPopups}
-    />
-
-    <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
-
-    <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} />
-
-    <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
-
-
-    {/* <PopupWithForm
-    name={"delete-confirm"}
-    title={"Вы уверены?"}
-    buttonTitle={"Да"}
-    buttonType={"delete-confirm"}
-    /> */}
-      </CardsContext.Provider>
-    </CurrentUserContext.Provider>
+      <Header />
+      <CurrentUserContext.Provider value={currentUser}>
+        <CardsContext.Provider value={cards}>
+          {/* В задании требуется Cards подписать на контекст.
+          Cards находится в Main, потому и CardsContext.Provider */}
+          <Main
+            onEditProfile={handleEditProfileClick}
+            onAddPlace={handleAddPlaceClick}
+            onEditAvatar={handleEditAvatarClick}
+            onCardClick={onCardClick}
+            onCardLike={handleCardLike}
+            onCardDelete={handleCardDelete}
+          />
+          <Footer />
+          <ImagePopup
+            card={selectedCard}
+            onClose={closeAllPopups}
+          />
+          <EditProfilePopup
+            isOpen={isEditProfilePopupOpen}
+            onClose={closeAllPopups}
+            onUpdateUser={handleUpdateUser}
+          />
+          <AddPlacePopup
+            isOpen={isAddPlacePopupOpen}
+            onClose={closeAllPopups}
+            onAddPlace={handleAddPlaceSubmit}
+          />
+          <EditAvatarPopup
+            isOpen={isEditAvatarPopupOpen}
+            onClose={closeAllPopups}
+            onUpdateAvatar={handleUpdateAvatar}
+          />
+          {/* <PopupWithForm
+          name={"delete-confirm"}
+          title={"Вы уверены?"}
+          buttonTitle={"Да"}
+          buttonType={"delete-confirm"}
+          /> */}
+        </CardsContext.Provider>
+      </CurrentUserContext.Provider>
     </div>
-
   );
 }
 

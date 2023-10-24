@@ -68,21 +68,6 @@ class API {
     })
   }
 
-  // likeCard(id) {
-  //   return this._sendRequest(`${this._url}/cards/${id}/likes`, {
-  //     method: "PUT",
-  //     headers: this._headers,
-  //   })
-  // }
-
-  // dislikeCard(id) {
-  //   return this._sendRequest(`${this._url}/cards/${id}/likes`, {
-  //     method: "DELETE",
-  //     headers: this._headers,
-  //   })
-    
-  // }
-
   changeLikeCardStatus(id, like) {
     return this._sendRequest(`${this._url}/cards/${id}/likes`, {
       method: like ? 'DELETE' : 'PUT',

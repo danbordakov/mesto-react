@@ -17,17 +17,17 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
   }
 
   function handleSubmit(e) {
-  e.preventDefault();
-  onUpdateUser({
-    name: name,
-    about: job,
-  });
+    e.preventDefault();
+    onUpdateUser({
+      name: name,
+      about: job,
+    });
   }
 
   React.useEffect(() => {
     setName(user.name);
     setJob(user.about);
-  }, [user]); 
+  }, [isOpen]); 
 
   return (
     <PopupWithForm

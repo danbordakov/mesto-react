@@ -13,6 +13,10 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
     avatarRef.current.value = ''
   }
 
+  React.useEffect(() => {
+    avatarRef.current.value = ''
+  }, [isOpen]); 
+
   return (
     <PopupWithForm
     name={"avatar"}
@@ -23,11 +27,9 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
     onClose={onClose}
     onSubmit={handleSubmit}
   >
-    <>
       <input ref={avatarRef} id="avatar-link-input" type="url" className="popup__field popup__field_type_avatar-link" name="link"
           placeholder="Ссылка на аватар" required />
       <span className="popup__field-error avatar-link-input-error">&nbsp;</span>
-    </>
   </PopupWithForm>
   )
 }
